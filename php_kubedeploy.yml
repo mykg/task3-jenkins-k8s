@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: myweb-deploy
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        env: production
+        template:
+                metadata:
+                        name: myweb-pod
+                        labels:
+                                env: production
+                spec:
+                        containers:
+                                - name: myweb-con
+                                  image: mykgod/php:v1
+                                  volumeMounts:
+                                  - name: myweb-persistent-storage
+                                    mountPath: /var/www/html/
+                                  ports:
+                                  - containerPort: 80
+                                    name: myweb-pod
+                        volumes:
+                                - name: myweb-persistent-storage
+                                  persistentVolumeClaim:
+                                          claimName: myweb-pvc
